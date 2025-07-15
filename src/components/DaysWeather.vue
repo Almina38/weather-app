@@ -30,8 +30,9 @@
 
 
 export default (await import('vue')).defineComponent({
-  name: 'app',
-  
+  props:{
+    cityname : String
+  }
 })
 </script>
 
