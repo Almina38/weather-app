@@ -44,16 +44,17 @@
 
         <DaysWeather :cityname="cityname" />
 
-        <div id="div_Form" class="d-flex m-3 justify-content-center">
-          <form action="">
-            <input
-              type="button"
-              value="Change Location"
-              @click="changeLocation"
-              class="btn change_btn btn-primary"
-            />
-          </form>
-        </div>
+        <div id="div_Form" class="m-3">
+  <form class="d-flex justify-content-center" action="">
+    <input
+      type="button"
+      value="Change Location"
+      @click="changeLocation"
+      class="btn change_btn btn-primary"
+    />
+  </form>
+</div>
+
       </div>
     </div>
   </div>
@@ -148,7 +149,7 @@ export default {
         backgroundColor: 'rgba(0,0,0,0.5)',
         backgroundRepeat: 'no-repeat',
         borderRadius: '20px',
-        color: '#fff',
+        color: '#f5f5f5',
         marginLeft: '0px'
       }
     }
@@ -190,9 +191,7 @@ this.time =
 </script>
 
 <style scoped>
-body {
-  background-color: #343d4b;
-}
+
 
 .weather-temp {
   margin: 0;
@@ -203,6 +202,10 @@ body {
 .time {
   font-size: 1.5rem;
   font-weight: 600;
+}
+
+.date{
+  font-size: 1.1rem;
 }
 
 .container {
@@ -222,12 +225,14 @@ h2.today {
 .main-div {
   flex-basis: 55%;
   max-width: 55%;
+  backdrop-filter: blur(5px); 
 }
 
 .card-2 {
-  background-color: #212730;
+  background: rgba(42, 42, 64, 0.85);
+  backdrop-filter: blur(5px); 
   border-radius: 20px;
-  max-height: 480px;
+  max-height: 600px;
   flex-basis: 45%;
   max-width: 45%;
 }
@@ -251,10 +256,10 @@ table {
   margin-right: 0.3rem;
 }
 
-th,
-td {
-  font-size: 18px;
-  color: #fff;
+table th,
+table td {
+  font-size: 16px;
+  color: #f5f5f5;
 }
 
 td {
@@ -262,21 +267,38 @@ td {
 }
 
 .change_btn {
-  background-image: linear-gradient(to right, cyan, magenta);
-}
+background-color: #4fd1c5;
+color: #1e1e2f;
+border: none;
+border-radius: 8px;
+font-weight: 600;}
 
 .change_btn:hover {
-  transform: scale(0.9);
+  transform: scale(0.98);
+  background-color: #38b2ac;
 }
 
 .today-date-wrapper {
   display: block; 
 }
 
-/* Nieuwe CSS voor tabel layout op mobiel */
 @media (max-width: 768px) {
   .d-flex {
     flex-direction: column !important;
+  }
+
+  #div_Form form {
+    justify-content: center;
+    display: flex;
+  }
+  #div_Form input.change_btn {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    width: auto;
+    min-width: 120px;
+    justify-content: center;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .today-date-wrapper {
@@ -284,26 +306,26 @@ td {
     gap: 0.5rem;        
     align-items: center; 
   }
-
+table {
+  border-spacing: 0px 0px;
+}
   table th,
-  table td {
-    font-size: 15px; 
-    padding-right: 0px;
+   table td {
+    font-size: 13px;
+    padding-left: 0;
+    padding-right: 0;
   }
 
-  /* Grid voor tbody zodat labels en waarden per rij zijn */
   table tbody {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 0.5rem 1rem;
   }
 
-  /* Rijen van de tbody weg zodat th en td samen in grid */
   table tbody tr {
     display: contents;
   }
 
-  /* Labels bovenste rij */
   table tbody th {
     grid-row: 1;
     text-align: center;
@@ -311,7 +333,6 @@ td {
     padding: 0;
   }
 
-  /* Waarden onderste rij */
   table tbody td {
     grid-row: 2;
     text-align: center;

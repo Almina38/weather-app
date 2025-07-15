@@ -115,29 +115,30 @@ span{
     height: 35px;
 }
 
-.li_active{
-    background: #253d5c;
-    border-radius: 10px;
-    margin: 0.5rem;
-    color: #fff;
-    font-weight: 600;
-     display: inline-block;
+.li_active {
+  background: rgba(37, 61, 92, 0.7); /* zacht blauw met transparantie */
+  border-radius: 10px;
+  margin: 0.5rem;
+  color: #f5f5f5;
+  font-weight: 600;
+  display: inline-block;
   width: 21%;
   max-width: 21%;
   vertical-align: top;
   text-align: center;
+  transition: background-color 0.3s ease;
 }
-
 
 .li_active:hover {
-    transform: scale(1.2);
-    transition: transform 0.1s ease;
+  background-color: rgba(37, 61, 92, 0.9); /* iets donkerder bij hover */
+  transform: scale(1.1);
 }
+
 
 .li_active_temp{
     display: inline-block;
     background-color: #222831;
-    color: #ffffff;
+    color: #f5f5f5;
     transition: background-color 0.5s;
     border-radius: 10px;
 }
