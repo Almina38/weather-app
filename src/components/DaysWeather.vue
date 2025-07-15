@@ -86,7 +86,7 @@ export default (await import('vue')).defineComponent({
     width: 90%;
     box-shadow: 0 4px 8px 0 rgb(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 2;
-    width: 90%;
+    width: 95%;
     margin: auto;
 }
 
@@ -117,11 +117,15 @@ span{
 
 .li_active{
     background: #253d5c;
-    color: #222831;
     border-radius: 10px;
     margin: 0.5rem;
     color: #fff;
     font-weight: 600;
+     display: inline-block;
+  width: 21%;
+  max-width: 21%;
+  vertical-align: top;
+  text-align: center;
 }
 
 
@@ -136,5 +140,25 @@ span{
     color: #ffffff;
     transition: background-color 0.5s;
     border-radius: 10px;
+}
+
+@media (max-width: 1268px) {
+  .li_active {
+    width: 48%;
+    max-width: 48%;
+    font-size: 0.85rem;
+    margin: 0.5rem 1%;
+  }
+
+  .li_active img {
+    width: 35px;
+    height: 35px;
+    
+  }
+
+  .py-3 {
+    padding-top: 0.17rem !important;
+    padding-bottom: 0.2rem !important;
+  }
 }
 </style>

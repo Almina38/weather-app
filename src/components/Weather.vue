@@ -1,7 +1,6 @@
 <template>
   <div class="container p-0">
     <div class="d-flex">
-      <!-- Dynamische achtergrond via :style -->
       <div :style="backgroundStyle" class="card main-div w-100">
         <div class="p-3">
           <h2 class="today">Today</h2>
@@ -36,7 +35,7 @@
             </tr>
             <tr>
               <th>Wind</th>
-              <td>{{ wind }}</td>
+              <td>{{ windKmh }}</td>
             </tr>
           </tbody>
         </table>
@@ -106,6 +105,10 @@ export default {
     }
   },
   computed: {
+    windKmh() {
+    if (!this.wind) return '';
+    return Math.round(this.wind * 3.6) + ' km/h';
+  },
     backgroundStyle() {
       if (!this.iconUrl) return {}
 
@@ -144,7 +147,7 @@ export default {
         backgroundRepeat: 'no-repeat',
         borderRadius: '20px',
         color: '#fff',
-        marginLeft: '60px'
+        marginLeft: '0px'
       }
     }
   },
@@ -163,14 +166,23 @@ export default {
     this.temp_max = Math.round(weatherData.main.temp_max)
     this.iconUrl = `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`
 
-    const d = new Date()
-    this.date =
-      d.getDate() +
-      ' ' +
-      this.monthNames[d.getMonth()] +
-      ' ' +
-      d.getFullYear()
-this.time = d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
+    const utcNow = Math.floor(Date.now() / 1000);
+const localTimestamp = utcNow + weatherData.timezone; // offset in seconden
+
+const localDate = new Date(localTimestamp * 1000);
+
+this.date =
+  localDate.getUTCDate() +
+  ' ' +
+  this.monthNames[localDate.getUTCMonth()] +
+  ' ' +
+  localDate.getUTCFullYear();
+
+this.time =
+  localDate.getUTCHours().toString().padStart(2, '0') +
+  ':' +
+  localDate.getUTCMinutes().toString().padStart(2, '0');
+
   }
 }
 </script>
@@ -178,6 +190,7 @@ this.time = d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toSt
 <style scoped>
 body {
   background-color: #343d4b;
+  
 }
 
 .weather-temp {
@@ -185,14 +198,12 @@ body {
   font-weight: 700;
   font-size: 4em;
 }
-
+.container{
+  max-width: 80%;
+}
 h2.today {
   font-size: 3rem;
   font-weight: 400;
-}
-
-.main-div {
-  /* background komt nu uit :style */
 }
 
 .temp {
@@ -200,12 +211,19 @@ h2.today {
   bottom: 0;
 }
 
+.main-div {
+  flex-basis: 55%;
+  max-width: 55%;
+}
+
 .card-2 {
   background-color: #212730;
   border-radius: 20px;
-  margin-right: 60px;
   max-height: 480px;
+  flex-basis: 45%;
+  max-width: 45%;
 }
+
 
 .card-details {
   margin-left: 19px;
@@ -213,10 +231,9 @@ h2.today {
 
 table {
   position: relative;
-  left: 15px;
   border-collapse: separate;
   border-spacing: 15px;
-  width: 85%;
+  width: 80%;
   text-align: left;
   max-width: 600px;
   margin: 0 auto;
