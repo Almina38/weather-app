@@ -41,7 +41,7 @@ export default (await import('vue')).defineComponent({
 </script>
 
 
-<style >
+<style scoped>
 
 html, body{
   margin: 0;

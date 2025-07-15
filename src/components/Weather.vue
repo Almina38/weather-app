@@ -53,7 +53,7 @@ export default (await import('vue')).defineComponent({
 })
 </script>
 
-<style >
+<style scoped>
 body{
   background-color: #343d4b;
 }
@@ -106,7 +106,7 @@ padding: 0 20px 0;
   margin-left: 19px;
 }
 
-h1._left{
+.h1_left{
   position: absolute;
   bottom: 25px;
   left: 16px;
@@ -114,6 +114,48 @@ h1._left{
   line-height: 1.2;
 }
 
+.h3_left{
+  position: absolute;
+  left: 16px;
+  font-size: 2vw;
+  line-height: 0.5;
+}
 
+.h3_left small {
+  font-size: 1rem;
+}
+
+table{
+  position: relative;
+  left: 15px;
+  border-collapse: separate;
+  border-spacing: 15px;
+  width: 85%;
+  text-align: left;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+th,td {
+  font-size: 18px;
+  color: #fff;
+}
+
+td {
+  text-align: right;
+}
+
+table,
+tr:hover{
+  color: red;
+}
+
+.change-btn{
+  background-image: (linear-gradient(to right, cyan, magenta));
+}
+
+.change-btn:hover{
+  transform: scale(0.9);
+}
 
 </style>
