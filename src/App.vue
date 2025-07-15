@@ -1,7 +1,11 @@
 <template>
   <div class="app">
     <div class="header container h-100 p-4 position-relative">
-      <h1 class="titel">VueTher</h1>
+  <img
+    src="/img/titel.png"
+    alt="VueTher"
+    class="titel-img"
+  />
       <p class="intro">Welcome to the weather-app built by Vue.js 3!</p>
       <div class="d-flex justify-content-center h-100">
         <div class="searchbar w-50 mx-2 position-relative">
@@ -90,6 +94,16 @@ export default {
       this.city = suggestion;
       this.suggestions = [];
       this.searchWeather();
+    },
+    handleClickOutside(event) {
+      const searchInput = this.$refs.searchInput;
+      const suggestionsList = this.$el.querySelector('.suggestions-list');
+      if (
+        !searchInput.contains(event.target) &&
+        (!suggestionsList || !suggestionsList.contains(event.target))
+      ) {
+        this.suggestions = [];
+      }
     }
   },
   watch: {
@@ -106,6 +120,12 @@ export default {
         });
       }
     }
+  },
+  mounted() {
+    document.addEventListener('click', this.handleClickOutside);
+  },
+  beforeUnmount() {
+    document.removeEventListener('click', this.handleClickOutside);
   }
 };
 </script>
@@ -115,6 +135,15 @@ html, body {
   margin: 0;
   padding: 0;
 }
+.titel-img {
+  max-width: 300px;  
+  max-height: 80px;  
+  width: 100%;      
+  height: auto;     
+  display: block;
+  margin: 0 auto 0.5rem auto; 
+}
+
 
 .header {
   background: rgba(42, 42, 64, 0.85);
@@ -183,6 +212,14 @@ html, body {
     width: 64% !important;  
   }
 
+  .titel-img {
+    max-width: 200px;
+    max-height: 60px;
+  }
+
+  .titel {
+    display: none;
+  }
   .titel{
     font-size: 1.2rem;
   }
