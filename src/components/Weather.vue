@@ -19,12 +19,17 @@
       <table class="m-4">
         <tbody>
           <tr>
-            <th>Sea Level</th>
-            <td>{{sea_level}}</td>
+            <th>Min Temp</th>
+            <td>{{ temp_min }}&deg;C</td>
           </tr>
           <tr>
+            <th>Max Temp</th>
+            <td>{{ temp_max }}&deg;C</td>
+          </tr>
+          
+          <tr>
             <th>Humidity</th>
-            <td>{{ humidity }}</td>
+            <td>{{ humidity }}%</td>
           </tr>
           <tr>
             <th>Wind</th>
@@ -66,7 +71,9 @@ export default (await import('vue')).defineComponent({
       date: null,
       time: null,
       name: null,
-      sea_level: null,
+      //sea_level: null,
+      temp_min: null,
+    temp_max: null,
       wind: null,
       humidity:null,
       country: null,
@@ -81,14 +88,17 @@ export default (await import('vue')).defineComponent({
     this.description = weatherData.weather[0].description;
     this.name = weatherData.name;
     this.wind =weatherData.wind.speed;
-    this.sea_level = weatherData.main.sea_level;
+    //this.sea_level = weatherData.main.sea_level;
     this.country = weatherData.sys.country;
     this.humidity = weatherData.main.humidity;
+    this.temp_min = Math.round(weatherData.main.temp_min);
+    this.temp_max = Math.round(weatherData.main.temp_max);
+
     
     this.iconUrl = `https://api.openweathermap.org/img/w/${weatherData.weather[0].icon}.png`;
     const d = new Date();
     this.date = d.getDate() + ' ' + this.monthNames[d.getMonth()] + ' ' + d.getFullYear();
-    this.time = d.getHours() + ':' +  d.getMinutes() + ':' +  d.getSeconds();
+    this.time = d.getHours() + ':' +  d.getMinutes()  ;
     console.log(weatherData);
   }
 })

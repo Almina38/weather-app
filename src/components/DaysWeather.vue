@@ -1,37 +1,81 @@
 <template>
   <div class="days-tab text-center">
-    <div class="loading">Loading...</div>
-    <ul class="p-0">
-        <li class="li_active">
-            <div class="py-3">icon</div>
-            <div class="py-3">day</div>
-            <div class="py-3">14july</div>
+    <div v-if="loading" class="loading">Loading...</div>
+    <ul v-else class="p-0">
+        <li v-for ="day in forecast" :key="day.date" class="li_active">
+            <div class="py-3"><img :src="day.iconUrl"></div>
+            <div class="py-3">{{ getDayName(day.date) }}</div>
+            <div class="py-3">
+      {{ day.temp_min }}&deg;C ~ {{ day.temp_max }}&deg;C
+    </div>
         </li>
-        <li class="li_active">
-            <div class="py-3">icon</div>
-            <div class="py-3">day</div>
-            <div class="py-3">14july</div>
-        </li>
-          <li class="li_active">
-            <div class="py-3">icon</div>
-            <div class="py-3">day</div>
-            <div class="py-3">14july</div>
-        </li>
-          <li class="li_active">
-            <div class="py-3">icon</div>
-            <div class="py-3">day</div>
-            <div class="py-3">14july</div>
-        </li>
+        
     </ul>
   </div>
 </template>
 
 <script>
 
-
+import axios from 'axios';
+import moment from 'moment';
 export default (await import('vue')).defineComponent({
   props:{
     cityname : String
+  },
+  data(){
+    return{
+        forecast: [],
+        loading: true,
+        iconUrl: null,
+    }
+  },
+  mounted(){
+    this.fetchWeatherData();
+  },
+  methods:{
+    async fetchWeatherData(){
+  const apikey = '4ce1eea15ac17ef2217657495f8e4622';
+  const city = this.cityname;
+  const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${apikey}`;
+
+  try {
+    const response = await axios.get(apiUrl);
+    const forecastData = response.data.list;
+
+    // groepeer items per dag (YYYY-MM-DD)
+    const groupedByDay = forecastData.reduce((acc, item) => {
+      const day = item.dt_txt.split(' ')[0]; // b.v. "2025-07-15"
+      if (!acc[day]) acc[day] = [];
+      acc[day].push(item);
+      return acc;
+    }, {});
+
+    // Array met min en max temp per dag en icon van eerste item die dag
+    const dailyTemps = Object.entries(groupedByDay).map(([date, items]) => {
+      const temps = items.map(i => i.main.temp);
+      const minTemp = Math.round(Math.min(...temps));
+      const maxTemp = Math.round(Math.max(...temps));
+      const icon = items[0].weather[0].icon;
+      return {
+        date: moment(date),
+        temp_min: minTemp,
+        temp_max: maxTemp,
+        iconUrl: `https://openweathermap.org/img/w/${icon}.png`,
+      };
+    });
+
+    this.forecast = dailyTemps.slice(1, 5);
+    this.loading = false;
+
+  } catch (error) {
+    console.error('Error fetching weather data:', error);
+    this.loading = false;
+  }
+},
+
+    getDayName(date){
+        return date.format('ddd')
+    }
   }
 })
 </script>
