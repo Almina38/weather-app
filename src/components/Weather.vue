@@ -46,7 +46,7 @@
 </template>
 
 <script>
-
+import axios from 'axios'
 import DaysWeather from './DaysWeather.vue';
 
 export default (await import('vue')).defineComponent({
@@ -54,6 +54,30 @@ export default (await import('vue')).defineComponent({
   components: {
     DaysWeather
   },
+  props:{
+    city: String,
+  },
+  data(){
+    return{
+      temperature: null,
+      description: null,
+      iconUrl: null,
+      date: null,
+      time: null,
+      name: null,
+    }
+  },
+  async created(){
+    const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=4ce1eea15ac17ef2217657495f8e4622`);
+    const weatherData = response.data;
+    this.temperature = weatherData.main.temp;
+    this.description - weatherData.weather[0].description;
+    this.name = weatherData.name;
+    this.iconUrl = `https://api.openweathermap.org/img/w/${weatherData.weather[0].icon}.png`;
+    const d = new Date();
+    this.time = d.getHours() + ':' +  d.getMinutes() + ':' +  d.getSeconds();
+    console.log(weatherData);
+  }
 })
 </script>
 
