@@ -3,9 +3,11 @@
     <div class="d-flex">
       <div :style="backgroundStyle" class="card main-div w-100">
         <div class="p-3">
-          <h2 class="today">Today</h2>
-          <p class="text light date mb-0">{{ date }}</p>
-          <small>{{ time }}</small>
+        <div class="today-date-wrapper">
+        <h2 class="today">Today</h2>
+        <p class="text light date mb-0">{{ date }}</p>
+      </div>
+        <small class="time">{{ time }}</small>
           <h2 class="place">
             <i class="fa fa-location"></i> {{ name }} <small>{{ country }}</small>
           </h2>
@@ -190,7 +192,6 @@ this.time =
 <style scoped>
 body {
   background-color: #343d4b;
-  
 }
 
 .weather-temp {
@@ -198,9 +199,16 @@ body {
   font-weight: 700;
   font-size: 4em;
 }
-.container{
+
+.time {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.container {
   max-width: 80%;
 }
+
 h2.today {
   font-size: 3rem;
   font-weight: 400;
@@ -224,7 +232,6 @@ h2.today {
   max-width: 45%;
 }
 
-
 .card-details {
   margin-left: 19px;
 }
@@ -233,10 +240,15 @@ table {
   position: relative;
   border-collapse: separate;
   border-spacing: 15px;
-  width: 80%;
   text-align: left;
   max-width: 600px;
   margin: 0 auto;
+}
+
+.place i.fa-location {
+  font-size: 1rem; 
+  vertical-align: middle; 
+  margin-right: 0.3rem;
 }
 
 th,
@@ -249,16 +261,125 @@ td {
   text-align: right;
 }
 
-table,
-tr:hover {
-  color: red;
-}
-
 .change_btn {
   background-image: linear-gradient(to right, cyan, magenta);
 }
 
 .change_btn:hover {
   transform: scale(0.9);
+}
+
+.today-date-wrapper {
+  display: block; 
+}
+
+/* Nieuwe CSS voor tabel layout op mobiel */
+@media (max-width: 768px) {
+  .d-flex {
+    flex-direction: column !important;
+  }
+
+  .today-date-wrapper {
+    display: flex;      
+    gap: 0.5rem;        
+    align-items: center; 
+  }
+
+  table th,
+  table td {
+    font-size: 15px; 
+    padding-right: 0px;
+  }
+
+  /* Grid voor tbody zodat labels en waarden per rij zijn */
+  table tbody {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem 1rem;
+  }
+
+  /* Rijen van de tbody weg zodat th en td samen in grid */
+  table tbody tr {
+    display: contents;
+  }
+
+  /* Labels bovenste rij */
+  table tbody th {
+    grid-row: 1;
+    text-align: center;
+    font-weight: 600;
+    padding: 0;
+  }
+
+  /* Waarden onderste rij */
+  table tbody td {
+    grid-row: 2;
+    text-align: center;
+    padding: 0;
+  }
+
+  .main-div,
+  .card-2 {
+    max-width: 100% !important;
+    flex-basis: 100% !important;
+    max-height: none;
+    min-height: 240px;
+  }
+
+  .card-2 {
+    margin-bottom: 1rem;
+  }
+
+  .weather-temp {
+    font-size: 2.5rem;  
+  }
+
+  h2.today {
+    font-size: 1.8rem;
+    margin-bottom: 0;
+    display: inline-block;
+    vertical-align: middle; 
+  }
+
+  .date {
+    font-size: 0.9rem;
+    display: inline-block;
+    margin-left: 0.1rem; 
+    vertical-align: middle; 
+    position: relative;
+    top: 8px; 
+  }
+
+  .p-3 {
+    margin-left: 30px;
+  }
+
+  .time {
+    font-size: 1.1rem; 
+    margin-bottom: 0.5rem;
+    margin-left: 2px;
+    display: block;
+  }
+
+  .m-4 {
+    font-size: 0.3rem;
+  }
+
+  .place {
+    font-size: 1.1rem;  
+  }
+
+  .temp h2 {
+    font-size: 1rem; 
+  }
+
+  .temp h2 img {
+    width: 40px;  
+    height: 40px;
+  }
+
+  .p-3 {
+    padding: 0.5rem !important; 
+  }
 }
 </style>

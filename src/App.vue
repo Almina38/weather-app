@@ -38,8 +38,8 @@ export default {
   components: { Weather },
   data() {
     return {
-      city: '',
-      showWeather: false,
+      city: 'Leiden', //default stad
+      showWeather: true,
       suggestions: []
     };
   },
