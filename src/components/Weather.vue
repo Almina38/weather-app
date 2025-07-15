@@ -72,7 +72,8 @@ h2.mb-1.day{
 .main-div{
   border-radius: 20px;
   color: #fff;
-background-image: url('@/assets/img/background.png');  background-size: cover;
+  background-image: url('./img/background.png');  
+  background-size: cover;
   background-position: center;
   background-blend-mode: overlay;
   background-color: rgb(0, 0, 0, 0.5);
