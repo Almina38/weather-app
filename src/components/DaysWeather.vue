@@ -6,7 +6,7 @@
             <div class="py-3"><img :src="day.iconUrl"></div>
             <div class="py-3">{{ getDayName(day.date) }}</div>
             <div class="py-3">
-      {{ day.temp_min }}&deg;C ~ {{ day.temp_max }}&deg;C
+      {{ day.temp_min }}&deg;C |  {{ day.temp_max }}&deg;C
     </div>
         </li>
         

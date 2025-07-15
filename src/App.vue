@@ -1,7 +1,8 @@
 <template>
   <div class="app">
     <div class="header container h-100 p-5">
-      <h1 class="mb-5">Weather App</h1>
+      <h1 class="titel">Vue-ther weather</h1>
+      <p class="intro">Welcome to the weather-app built by Vue.js 3!</p>
       <div class="d-flex justify-content-center h-100">
         <div class="searchbar w-50 mx-2">
           <input type="text" class="input form-control" v-model="city" placeholder="Enter a city">
@@ -60,10 +61,19 @@ html, body{
   color: #fff;
   text-align: center;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  margin-top: 5rem;
+  margin-top: 1rem;
+  width: 80%;
 }
 
 .btn-search{
   background-image: linear-gradient(to right, cyan, magenta);
 }
+.titel{
+  font-size: 1.7rem;
+}
+.intro{
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
 </style>

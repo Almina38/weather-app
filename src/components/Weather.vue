@@ -3,7 +3,7 @@
     <div class="d-flex">
       <div class="card main-div w-100">
         <div class="p-3">
-          <h2 class="mb-1 day">Today</h2>
+          <h2 class="today">Today</h2>
           <p class="text light date mb-0">{{ date }}</p>
           <small>{{time}}</small>
           <h2 class="place">
@@ -40,7 +40,7 @@
       <DaysWeather :cityname="cityname"></DaysWeather>
       <div id="div_Form" class="d-flex m-3 justify-content-center">
         <form action="">
-          <input type="button" value="Change Location" class="btn change-btn btn-primary">
+          <input type="button" value="Change Location" @click="changeLocation" class="btn change_btn btn-primary">
         </form>
       </div>
     </div>
@@ -81,6 +81,11 @@ export default (await import('vue')).defineComponent({
             "August","September","October","November","December"],
     }
   },
+  methods:{
+    changeLocation(){
+      window.location.reload()
+    }
+  },
   async created(){
     const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=4ce1eea15ac17ef2217657495f8e4622`);
     const weatherData = response.data;
@@ -107,6 +112,7 @@ export default (await import('vue')).defineComponent({
 <style scoped>
 body{
   background-color: #343d4b;
+ 
 }
 
 .weather-temp{
@@ -115,7 +121,7 @@ body{
   font-size: 4em;
 }
 
-h2.mb-1.day{
+h2.today{
   font-size: 3rem;
   font-weight: 400;
 }
@@ -129,6 +135,8 @@ h2.mb-1.day{
   background-blend-mode: overlay;
   background-color: rgb(0, 0, 0, 0.5);
   background-repeat: no-repeat;
+  margin-left: 60px;
+ 
 }
 
 .temp{
@@ -136,17 +144,13 @@ h2.mb-1.day{
   bottom: 0;
 }
 
-.main-div:hover
-{
-  transform: scale(1.1);
-  transition: transform 0.5s ease;
-  z-index: 1;
 
-}
 
 .card-2{
   background-color: #212730;
   border-radius: 20px;
+  margin-right: 60px;
+  max-height: 480px;
 }
 
 /* h2, p{
@@ -201,11 +205,11 @@ tr:hover{
   color: red;
 }
 
-.change-btn{
-  background-image: (linear-gradient(to right, cyan, magenta));
+.change_btn{
+  background-image: linear-gradient(to right, cyan, magenta);
 }
 
-.change-btn:hover{
+.change_btn:hover{
   transform: scale(0.9);
 }
 
