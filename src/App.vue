@@ -40,8 +40,12 @@ export default (await import('vue')).defineComponent({
 })
 </script>
 
+
 <style >
-body{
+
+html, body{
+  margin: 0;
+  padding: 0;
   background-color: #121212;
 }
 
