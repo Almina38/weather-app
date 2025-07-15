@@ -337,9 +337,12 @@ td {
   }
   table th,
   table td {
-    font-size: 13px;
+    font-size: 15px;
     padding-left: 0;
     padding-right: 0;
+  }
+  table th{
+    font-size: 13px;
   }
 
   table tbody {
@@ -378,11 +381,11 @@ td {
   }
 
   .weather-temp {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 
   h2.today {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     margin-bottom: 0;
     display: inline-block;
     vertical-align: middle;
@@ -398,7 +401,7 @@ td {
   }
 
   .p-3 {
-    margin-left: 30px;
+    margin-left: 20px;
   }
 
   .time {
@@ -409,7 +412,7 @@ td {
   }
 
   .m-4 {
-    font-size: 0.3rem;
+    font-size: 0.4rem;
   }
 
   .place {
