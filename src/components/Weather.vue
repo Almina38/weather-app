@@ -1,69 +1,77 @@
 <template>
   <div class="container p-0">
     <div class="d-flex">
-      <div class="card main-div w-100">
+      <!-- Dynamische achtergrond via :style -->
+      <div :style="backgroundStyle" class="card main-div w-100">
         <div class="p-3">
           <h2 class="today">Today</h2>
           <p class="text light date mb-0">{{ date }}</p>
-          <small>{{time}}</small>
+          <small>{{ time }}</small>
           <h2 class="place">
             <i class="fa fa-location"></i> {{ name }} <small>{{ country }}</small>
           </h2>
           <div class="temp">
             <h1 class="weather-temp">{{ temperature }}&deg;</h1>
-            <h2 class="text-light">{{ description }} <img :src="iconUrl"></h2>
+            <h2 class="text-light">
+              {{ description }} <img :src="iconUrl" />
+            </h2>
           </div>
         </div>
       </div>
-    <div class="card card-2 w-100">
-      <table class="m-4">
-        <tbody>
-          <tr>
-            <th>Min Temp</th>
-            <td>{{ temp_min }}&deg;C</td>
-          </tr>
-          <tr>
-            <th>Max Temp</th>
-            <td>{{ temp_max }}&deg;C</td>
-          </tr>
-          
-          <tr>
-            <th>Humidity</th>
-            <td>{{ humidity }}%</td>
-          </tr>
-          <tr>
-            <th>Wind</th>
-            <td>{{wind}}</td>
-          </tr>
-        </tbody>
-      </table>
-      <DaysWeather :cityname="cityname"></DaysWeather>
-      <div id="div_Form" class="d-flex m-3 justify-content-center">
-        <form action="">
-          <input type="button" value="Change Location" @click="changeLocation" class="btn change_btn btn-primary">
-        </form>
+
+      <div class="card card-2 w-100">
+        <table class="m-4">
+          <tbody>
+            <tr>
+              <th>Min Temp</th>
+              <td>{{ temp_min }}&deg;C</td>
+            </tr>
+            <tr>
+              <th>Max Temp</th>
+              <td>{{ temp_max }}&deg;C</td>
+            </tr>
+            <tr>
+              <th>Humidity</th>
+              <td>{{ humidity }}%</td>
+            </tr>
+            <tr>
+              <th>Wind</th>
+              <td>{{ wind }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <DaysWeather :cityname="cityname" />
+
+        <div id="div_Form" class="d-flex m-3 justify-content-center">
+          <form action="">
+            <input
+              type="button"
+              value="Change Location"
+              @click="changeLocation"
+              class="btn change_btn btn-primary"
+            />
+          </form>
+        </div>
       </div>
     </div>
-  </div>
-
-    
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import DaysWeather from './DaysWeather.vue';
+import DaysWeather from './DaysWeather.vue'
 
-export default (await import('vue')).defineComponent({
+export default {
   name: 'myWeather',
   components: {
     DaysWeather
   },
-  props:{
-    city: String,
+  props: {
+    city: String
   },
-  data(){
-    return{
+  data() {
+    return {
       cityname: this.city,
       temperature: null,
       description: null,
@@ -71,116 +79,139 @@ export default (await import('vue')).defineComponent({
       date: null,
       time: null,
       name: null,
-      //sea_level: null,
       temp_min: null,
-    temp_max: null,
+      temp_max: null,
       wind: null,
-      humidity:null,
+      humidity: null,
       country: null,
-      monthNames: ["January","February","March","April","May","June","July",
-            "August","September","October","November","December"],
+      monthNames: [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+      ]
     }
   },
-  methods:{
-    changeLocation(){
+  methods: {
+    changeLocation() {
       window.location.reload()
     }
   },
-  async created(){
-    const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=4ce1eea15ac17ef2217657495f8e4622`);
-    const weatherData = response.data;
-    this.temperature = Math.round(weatherData.main.temp);
-    this.description = weatherData.weather[0].description;
-    this.name = weatherData.name;
-    this.wind =weatherData.wind.speed;
-    //this.sea_level = weatherData.main.sea_level;
-    this.country = weatherData.sys.country;
-    this.humidity = weatherData.main.humidity;
-    this.temp_min = Math.round(weatherData.main.temp_min);
-    this.temp_max = Math.round(weatherData.main.temp_max);
+  computed: {
+    backgroundStyle() {
+      if (!this.iconUrl) return {}
 
-    
-    this.iconUrl = `https://api.openweathermap.org/img/w/${weatherData.weather[0].icon}.png`;
-    const d = new Date();
-    this.date = d.getDate() + ' ' + this.monthNames[d.getMonth()] + ' ' + d.getFullYear();
-    this.time = d.getHours() + ':' +  d.getMinutes()  ;
-    console.log(weatherData);
+      const match = this.iconUrl.match(/\/(\d{2}[dn])@/)
+      const iconCode = match ? match[1] : '01d'
+
+      const bgMap = {
+        '01d': 'sunny.jpg',
+        '01n': 'clear-night.jpg',
+        '02d': 'few-clouds-day.jpg',
+        '02n': 'few-clouds-night.jpg',
+        '03d': 'scattered-clouds.jpg',
+        '03n': 'scattered-clouds-night.jpg',
+        '04d': 'broken-clouds.jpg',
+        '04n': 'broken-clouds-night.jpg',
+        '09d': 'shower-rain.jpg',
+        '09n': 'shower-rain-night.jpg',
+        '10d': 'rain.jpg',
+        '10n': 'rain-night.jpg',
+        '11d': 'thunderstorm.jpg',
+        '11n': 'thunderstorm-night.jpg',
+        '13d': 'snow.jpg',
+        '13n': 'snow-night.jpg',
+        '50d': 'mist.jpg',
+        '50n': 'mist-night.jpg'
+      }
+
+      const imageFile = bgMap[iconCode] || 'default.jpg'
+
+      return {
+        backgroundImage: `url('/img/${imageFile}')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundBlendMode: 'overlay',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        backgroundRepeat: 'no-repeat',
+        borderRadius: '20px',
+        color: '#fff',
+        marginLeft: '60px'
+      }
+    }
+  },
+  async created() {
+    const response = await axios.get(
+      `https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=4ce1eea15ac17ef2217657495f8e4622`
+    )
+    const weatherData = response.data
+    this.temperature = Math.round(weatherData.main.temp)
+    this.description = weatherData.weather[0].description
+    this.name = weatherData.name
+    this.wind = weatherData.wind.speed
+    this.country = weatherData.sys.country
+    this.humidity = weatherData.main.humidity
+    this.temp_min = Math.round(weatherData.main.temp_min)
+    this.temp_max = Math.round(weatherData.main.temp_max)
+    this.iconUrl = `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`
+
+    const d = new Date()
+    this.date =
+      d.getDate() +
+      ' ' +
+      this.monthNames[d.getMonth()] +
+      ' ' +
+      d.getFullYear()
+this.time = d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
   }
-})
+}
 </script>
 
 <style scoped>
-body{
+body {
   background-color: #343d4b;
- 
 }
 
-.weather-temp{
+.weather-temp {
   margin: 0;
   font-weight: 700;
   font-size: 4em;
 }
 
-h2.today{
+h2.today {
   font-size: 3rem;
   font-weight: 400;
 }
 
-.main-div{
-  border-radius: 20px;
-  color: #fff;
-  background-image: url('./img/background.png');  
-  background-size: cover;
-  background-position: center;
-  background-blend-mode: overlay;
-  background-color: rgb(0, 0, 0, 0.5);
-  background-repeat: no-repeat;
-  margin-left: 60px;
- 
+.main-div {
+  /* background komt nu uit :style */
 }
 
-.temp{
+.temp {
   position: absolute;
   bottom: 0;
 }
 
-
-
-.card-2{
+.card-2 {
   background-color: #212730;
   border-radius: 20px;
   margin-right: 60px;
   max-height: 480px;
 }
 
-/* h2, p{
-padding: 0 20px 0;
-}*/ 
-
-.card-details{
+.card-details {
   margin-left: 19px;
 }
 
-.h1_left{
-  position: absolute;
-  bottom: 25px;
-  left: 16px;
-  font-size: 3vw;
-  line-height: 1.2;
-}
-
-.h3_left{
-  position: absolute;
-  left: 16px;
-  font-size: 2vw;
-  line-height: 0.5;
-}
-
-.h3_left small {
-  font-size: 1rem;
-}
-
-table{
+table {
   position: relative;
   left: 15px;
   border-collapse: separate;
@@ -191,7 +222,8 @@ table{
   margin: 0 auto;
 }
 
-th,td {
+th,
+td {
   font-size: 18px;
   color: #fff;
 }
@@ -201,16 +233,15 @@ td {
 }
 
 table,
-tr:hover{
+tr:hover {
   color: red;
 }
 
-.change_btn{
+.change_btn {
   background-image: linear-gradient(to right, cyan, magenta);
 }
 
-.change_btn:hover{
+.change_btn:hover {
   transform: scale(0.9);
 }
-
 </style>
