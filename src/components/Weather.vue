@@ -69,12 +69,8 @@ import DaysWeather from './DaysWeather.vue'
 
 export default {
   name: 'myWeather',
-  components: {
-    DaysWeather
-  },
-  props: {
-    city: String
-  },
+  components: { DaysWeather },
+  props: { city: String },
   data() {
     return {
       cityname: this.city,
@@ -91,24 +87,21 @@ export default {
       country: null,
       errorMessage: '',
       monthNames: [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
       ]
     }
   },
   methods: {
     changeLocation() {
       window.location.reload()
+    },
+    isToday(dateStr) {
+      const today = new Date()
+      const date = new Date(dateStr)
+      return date.getDate() === today.getDate() &&
+             date.getMonth() === today.getMonth() &&
+             date.getFullYear() === today.getFullYear()
     }
   },
   computed: {
@@ -118,10 +111,8 @@ export default {
     },
     backgroundStyle() {
       if (!this.iconUrl) return {}
-
       const match = this.iconUrl.match(/\/(\d{2}[dn])@/)
       const iconCode = match ? match[1] : '01d'
-
       const bgMap = {
         '01d': 'sunny.jpg',
         '01n': 'clear-night.jpg',
@@ -142,9 +133,7 @@ export default {
         '50d': 'mist.jpg',
         '50n': 'mist-night.jpg'
       }
-
       const imageFile = bgMap[iconCode] || 'default.jpg'
-
       return {
         backgroundImage: `url('/img/${imageFile}')`,
         backgroundSize: 'cover',
@@ -160,22 +149,21 @@ export default {
   },
   async created() {
     try {
-      const response = await axios.get(
+      // huidige weer ophalen
+      const currentResponse = await axios.get(
         `https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=4ce1eea15ac17ef2217657495f8e4622`
       )
-      const weatherData = response.data
-      this.temperature = Math.round(weatherData.main.temp)
-      this.description = weatherData.weather[0].description
-      this.name = weatherData.name
-      this.wind = weatherData.wind.speed
-      this.country = weatherData.sys.country
-      this.humidity = weatherData.main.humidity
-      this.temp_min = Math.round(weatherData.main.temp_min)
-      this.temp_max = Math.round(weatherData.main.temp_max)
-      this.iconUrl = `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`
+      const currentData = currentResponse.data
+      this.temperature = Math.round(currentData.main.temp)
+      this.description = currentData.weather[0].description
+      this.name = currentData.name
+      this.wind = currentData.wind.speed
+      this.country = currentData.sys.country
+      this.humidity = currentData.main.humidity
+      this.iconUrl = `https://openweathermap.org/img/wn/${currentData.weather[0].icon}@2x.png`
 
       const utcNow = Math.floor(Date.now() / 1000)
-      const localTimestamp = utcNow + weatherData.timezone // offset in seconden
+      const localTimestamp = utcNow + currentData.timezone
       const localDate = new Date(localTimestamp * 1000)
 
       this.date =
@@ -190,10 +178,30 @@ export default {
         ':' +
         localDate.getUTCMinutes().toString().padStart(2, '0')
 
-      this.errorMessage = '' // reset error
+      const forecastResponse = await axios.get(
+        `https://api.openweathermap.org/data/2.5/forecast?q=${this.city}&units=metric&appid=4ce1eea15ac17ef2217657495f8e4622`
+      )
+      const forecastData = forecastResponse.data.list
+
+      // Filter forecast voor vandaag
+      const todayForecasts = forecastData.filter(item =>
+        this.isToday(item.dt_txt)
+      )
+
+      if (todayForecasts.length > 0) {
+        const tempsMin = todayForecasts.map(f => f.main.temp_min)
+        const tempsMax = todayForecasts.map(f => f.main.temp_max)
+        this.temp_min = Math.round(Math.min(...tempsMin))
+        this.temp_max = Math.round(Math.max(...tempsMax))
+      } else {
+        // fallback naar huidige min/max als geen forecast vandaag beschikbaar is
+        this.temp_min = Math.round(currentData.main.temp_min)
+        this.temp_max = Math.round(currentData.main.temp_max)
+      }
+
+      this.errorMessage = ''
     } catch (error) {
       this.errorMessage = 'Please type the correct city name.'
-      // Clear previous data if any
       this.temperature = null
       this.description = null
       this.name = null
@@ -211,6 +219,7 @@ export default {
 </script>
 
 <style scoped>
+/* Jouw bestaande styles */
 .weather-temp {
   margin: 0;
   font-weight: 700;
